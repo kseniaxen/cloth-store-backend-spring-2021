@@ -1,13 +1,7 @@
 package org.ksens.demo.java.springboot.clothstore;
 
-import org.ksens.demo.java.springboot.clothstore.entities.Category;
-import org.ksens.demo.java.springboot.clothstore.entities.Role;
-import org.ksens.demo.java.springboot.clothstore.entities.Subcategory;
-import org.ksens.demo.java.springboot.clothstore.entities.User;
-import org.ksens.demo.java.springboot.clothstore.repositories.CategoryDao;
-import org.ksens.demo.java.springboot.clothstore.repositories.RoleDao;
-import org.ksens.demo.java.springboot.clothstore.repositories.SubcategoryDao;
-import org.ksens.demo.java.springboot.clothstore.repositories.UserDao;
+import org.ksens.demo.java.springboot.clothstore.entities.*;
+import org.ksens.demo.java.springboot.clothstore.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +22,7 @@ public class ClothStoreApplication {
 			UserDao userDao,
 			CategoryDao categoryDao,
 			SubcategoryDao subcategoryDao,
+			SizeDao sizeDao,
 			PasswordEncoder passwordEncoder
 			) {
 		return args -> {
@@ -35,6 +30,8 @@ public class ClothStoreApplication {
 			roleDao.save(Role.builder().name("ROLE_USER").build());
 			categoryDao.save(Category.builder().name("C1").build());
 			categoryDao.save(Category.builder().name("C2").build());
+			sizeDao.save(Size.builder().title("S1").build());
+			sizeDao.save(Size.builder().title("S2").build());
 			Category c1Category = categoryDao.findCategoryByName("C1");
 			Category c2Category = categoryDao.findCategoryByName("C2");
 			subcategoryDao.save(

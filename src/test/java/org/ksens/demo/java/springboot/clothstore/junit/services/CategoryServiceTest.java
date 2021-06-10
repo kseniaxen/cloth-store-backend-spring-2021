@@ -112,6 +112,7 @@ public class CategoryServiceTest {
                                 new SubcategoryModel(3L, "sc1", 1L, new CategoryModel(1L,"c1")))
                         ).build()
         ).when(categoryServiceMock) // откуда? - из объекта categoryServiceMock - макета службы
+                .getSubcategories(); // как результат вызова какого метода? - getAll
         // вызов настроенного выше метода макета, созданного по интерфейсу
         ResponseModel responseModel =
                 categoryServiceMock.getSubcategories();
