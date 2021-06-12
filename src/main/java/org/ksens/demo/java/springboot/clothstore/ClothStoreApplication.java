@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
+
 @SpringBootApplication
 public class ClothStoreApplication {
 
@@ -23,6 +25,7 @@ public class ClothStoreApplication {
 			CategoryDao categoryDao,
 			SubcategoryDao subcategoryDao,
 			SizeDao sizeDao,
+			ProductDao productDao,
 			PasswordEncoder passwordEncoder
 			) {
 		return args -> {
@@ -76,6 +79,17 @@ public class ClothStoreApplication {
 							.role(userRole)
 							.build()
 			);
+			/*
+			productDao.save(
+					Product.builder()
+						.name("P1")
+						.description("D1")
+						.price(new BigDecimal(200.00))
+						.quantity(3)
+						.
+			)
+
+			 */
 		};
 
 	}
