@@ -3,6 +3,7 @@ package org.ksens.demo.java.springboot.clothstore;
 import org.ksens.demo.java.springboot.clothstore.entities.*;
 import org.ksens.demo.java.springboot.clothstore.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,15 @@ import java.math.BigDecimal;
 
 @SpringBootApplication
 public class ClothStoreApplication {
+
+	@Value("${tests.unit.strings.image-base64-dress}")
+	private String dressImageString;
+
+	@Value("${tests.unit.strings.image-base64-shirt}")
+	private String shirtImageString;
+
+	@Value("${tests.unit.strings.image-base64-jumper}")
+	private String jumperImageString;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ClothStoreApplication.class, args);
@@ -31,24 +41,6 @@ public class ClothStoreApplication {
 		return args -> {
 			roleDao.save(Role.builder().name("ROLE_ADMIN").build());
 			roleDao.save(Role.builder().name("ROLE_USER").build());
-			categoryDao.save(Category.builder().name("C1").build());
-			categoryDao.save(Category.builder().name("C2").build());
-			sizeDao.save(Size.builder().title("S1").build());
-			sizeDao.save(Size.builder().title("S2").build());
-			Category c1Category = categoryDao.findCategoryByName("C1");
-			Category c2Category = categoryDao.findCategoryByName("C2");
-			subcategoryDao.save(
-					Subcategory.builder()
-									.name("sub1")
-									.category(c1Category)
-									.build()
-			);
-			subcategoryDao.save(
-					Subcategory.builder()
-							.name("sub2")
-							.category(c2Category)
-							.build()
-			);
 			Role adminRole = roleDao.findRoleByName("ROLE_ADMIN");
 			Role userRole = roleDao.findRoleByName("ROLE_USER");
 			userDao.save(
@@ -79,17 +71,64 @@ public class ClothStoreApplication {
 							.role(userRole)
 							.build()
 			);
-			/*
+			categoryDao.save(Category.builder().name("womens").build());
+			categoryDao.save(Category.builder().name("mens").build());
+			Size size38 = sizeDao.save(Size.builder().title("38").build());
+			Size sizeM = sizeDao.save(Size.builder().title("M").build());
+			Category womensCategory = categoryDao.findCategoryByName("womens");
+			Category mensCategory = categoryDao.findCategoryByName("mens");
+			Subcategory dressSubcategory = subcategoryDao.save(
+					Subcategory.builder()
+							.name("dress")
+							.category(womensCategory)
+							.build()
+			);
+			Subcategory shirtSubcategory = subcategoryDao.save(
+					Subcategory.builder()
+							.name("shirt")
+							.category(womensCategory)
+							.build()
+			);
+			Subcategory jumperSubcategory = subcategoryDao.save(
+					Subcategory.builder()
+							.name("jumper")
+							.category(mensCategory)
+							.build()
+			);
+
 			productDao.save(
 					Product.builder()
-						.name("P1")
-						.description("D1")
-						.price(new BigDecimal(200.00))
+						.name("Dress by Pimkie")
+						.description("Composition: Viscose - 100%")
+						.price(new BigDecimal(1450.00))
 						.quantity(3)
-						.
-			)
-
-			 */
+						.image(dressImageString)
+						.subcategory(dressSubcategory)
+						.size(size38)
+					.build()
+			);
+			productDao.save(
+					Product.builder()
+							.name("Shirt by Zubrytskaya")
+							.description("Composition: Linen - 70%, Cotton - 30%")
+							.price(new BigDecimal(1990.00))
+							.quantity(4)
+							.image(shirtImageString)
+							.subcategory(shirtSubcategory)
+							.size(size38)
+							.build()
+			);
+			productDao.save(
+					Product.builder()
+							.name("Jumper by United Colors of Benetton")
+							.description("Composition: Cotton - 100%")
+							.price(new BigDecimal(1270.00))
+							.quantity(2)
+							.image(jumperImageString)
+							.subcategory(jumperSubcategory)
+							.size(sizeM)
+							.build()
+			);
 		};
 
 	}

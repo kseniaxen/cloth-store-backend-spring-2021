@@ -8,11 +8,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @Order(1)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private final HibernateWebAuthProvider authProvider;
 
@@ -93,4 +95,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 5. /api/role (GET)
         // 6. /logout (GET)
     }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // разрешаем обращаться к любым адресам
+                .allowedOrigins("http://localhost:3000") // клиентам, полученным с указанного адреса
+                .allowedMethods("*"); // все методы http-запросов разрешены
+    }
+
 }
