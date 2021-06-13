@@ -98,7 +98,7 @@ public class ClothStoreApplication {
 
 			productDao.save(
 					Product.builder()
-						.name("Dress by Pimkie")
+						.name("Pimkie")
 						.description("Composition: Viscose - 100%")
 						.price(new BigDecimal(1450.00))
 						.quantity(3)
@@ -109,7 +109,7 @@ public class ClothStoreApplication {
 			);
 			productDao.save(
 					Product.builder()
-							.name("Shirt by Zubrytskaya")
+							.name("Zubrytskaya")
 							.description("Composition: Linen - 70%, Cotton - 30%")
 							.price(new BigDecimal(1990.00))
 							.quantity(4)
@@ -120,7 +120,7 @@ public class ClothStoreApplication {
 			);
 			productDao.save(
 					Product.builder()
-							.name("Jumper by United Colors of Benetton")
+							.name("United Colors of Benetton")
 							.description("Composition: Cotton - 100%")
 							.price(new BigDecimal(1270.00))
 							.quantity(2)
