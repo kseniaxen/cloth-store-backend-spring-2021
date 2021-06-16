@@ -30,6 +30,9 @@ public class Product {
     @Column(name = "image")
     private String image;
     @ManyToOne
+    @JoinColumn(name="category_id", nullable=false)
+    private Category category;
+    @ManyToOne
     @JoinColumn(name="subcategory_id", nullable=false)
     private Subcategory subcategory;
     @ManyToOne

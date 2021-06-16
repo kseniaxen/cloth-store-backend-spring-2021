@@ -16,6 +16,4 @@ import lombok.NoArgsConstructor;
 public class SubcategoryModel {
     private Long id;
     public String name;
-    public Long categoryId;
-    public CategoryModel category;
 }

@@ -13,5 +13,4 @@ public interface ICategoryService {
     ResponseModel updateSubcategory(SubcategoryModel subcategoryModel);
     ResponseModel getSubcategories();
     ResponseModel deleteSubcategory(Long id);
-    ResponseModel getSubcategoryByCategory(Long id);
 }

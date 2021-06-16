@@ -1,6 +1,5 @@
 package org.ksens.demo.java.springboot.clothstore.services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.ksens.demo.java.springboot.clothstore.entities.Category;
 import org.ksens.demo.java.springboot.clothstore.entities.Subcategory;
 import org.ksens.demo.java.springboot.clothstore.models.CategoryModel;
@@ -93,48 +92,28 @@ public class CategoryService implements ICategoryService {
 
     public ResponseModel createSubcategory(SubcategoryModel subcategoryModel) {
         System.out.println(subcategoryModel);
-        Optional<Category> categoryOptional
-                = categoryDao.findById(subcategoryModel.getCategoryId());
-        if(categoryOptional.isPresent()){
-            Subcategory subcategory =
+        Subcategory subcategory =
                     Subcategory.builder()
                             .name(subcategoryModel.getName())
-                            .category(categoryOptional.get())
                             .build();
             subcategoryDao.save(subcategory);
             return ResponseModel.builder()
                     .status(ResponseModel.SUCCESS_STATUS)
                     .message(String.format("Subcategory %s Created", subcategory.getName()))
                     .build();
-        }else{
-            return ResponseModel.builder()
-                    .status(ResponseModel.FAIL_STATUS)
-                    .message(String.format("Category #%d Not Found", subcategoryModel.getCategoryId()))
-                    .build();
-        }
     }
 
     public ResponseModel updateSubcategory(SubcategoryModel subcategoryModel) {
-        Optional<Category> categoryOptional
-                = categoryDao.findById(subcategoryModel.getCategoryId());
-        if(categoryOptional.isPresent()){
-            Subcategory subcategory =
+        Subcategory subcategory =
                     Subcategory.builder()
                             .id(subcategoryModel.getId())
                             .name(subcategoryModel.getName())
-                            .category(categoryOptional.get())
                             .build();
             subcategoryDao.save(subcategory);
             return ResponseModel.builder()
                     .status(ResponseModel.SUCCESS_STATUS)
                     .message(String.format("Subcategory %s Updated", subcategory.getName()))
                     .build();
-        }else{
-            return ResponseModel.builder()
-                    .status(ResponseModel.FAIL_STATUS)
-                    .message(String.format("Category #%d Not Found", subcategoryModel.getCategoryId()))
-                    .build();
-        }
     }
 
     public ResponseModel getSubcategories() {
@@ -145,10 +124,6 @@ public class CategoryService implements ICategoryService {
                                 SubcategoryModel.builder()
                                         .id(c.getId())
                                         .name(c.getName())
-                                        .category(CategoryModel.builder()
-                                                .id(c.getCategory().getId())
-                                                .name(c.getCategory().getName())
-                                                .build())
                                         .build()
                         )
                         .collect(Collectors.toList());
@@ -165,45 +140,12 @@ public class CategoryService implements ICategoryService {
             subcategoryDao.delete(subcategory);
             return ResponseModel.builder()
                     .status(ResponseModel.SUCCESS_STATUS)
-                    .message(String.format("Category #%s Deleted", subcategory.getName()))
+                    .message(String.format("Subcategory #%s Deleted", subcategory.getName()))
                     .build();
         } else {
             return ResponseModel.builder()
                     .status(ResponseModel.FAIL_STATUS)
-                    .message(String.format("Category #%d Not Found", id))
-                    .build();
-        }
-    }
-
-    public ResponseModel getSubcategoryByCategory(Long id){
-        Optional<Category> categoryOptional
-                = categoryDao.findById(id);
-        if(categoryOptional.isPresent()){
-            List<Subcategory> subcategories = subcategoryDao.findSubcategoryByCategoryId(id);
-            for (Subcategory s:subcategories) {
-                System.out.println(s);
-            }
-            List<SubcategoryModel> subcategoryModels =
-                    subcategories.stream()
-                            .map(c ->
-                                    SubcategoryModel.builder()
-                                            .id(c.getId())
-                                            .name(c.getName())
-                                            .category(CategoryModel.builder()
-                                                    .id(c.getCategory().getId())
-                                                    .name(c.getCategory().getName())
-                                                    .build())
-                                            .build()
-                            )
-                            .collect(Collectors.toList());
-            return ResponseModel.builder()
-                    .status(ResponseModel.SUCCESS_STATUS)
-                    .data(subcategoryModels)
-                    .build();
-        }else{
-            return ResponseModel.builder()
-                    .status(ResponseModel.FAIL_STATUS)
-                    .message(String.format("Category #%d Not Found", id))
+                    .message(String.format("Subcategory #%d Not Found", id))
                     .build();
         }
     }

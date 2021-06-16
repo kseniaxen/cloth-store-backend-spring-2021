@@ -1,15 +1,15 @@
 package org.ksens.demo.java.springboot.clothstore.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Subcategories")
 @Data
+@EqualsAndHashCode(exclude = "products")
+@ToString(exclude = "products")
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +19,6 @@ public class Subcategory {
     private Long id;
     @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
-    @ManyToOne
-    @JoinColumn(name="category_id", nullable = false)
-    private Category category;
+    @OneToMany(mappedBy="subcategory", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private Set<Product> products;
 }

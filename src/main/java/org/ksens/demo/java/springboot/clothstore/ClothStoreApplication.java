@@ -71,28 +71,23 @@ public class ClothStoreApplication {
 							.role(userRole)
 							.build()
 			);
-			categoryDao.save(Category.builder().name("womens").build());
-			categoryDao.save(Category.builder().name("mens").build());
+			Category womensCategory = categoryDao.save(Category.builder().name("womens").build());
+			Category mensCategory = categoryDao.save(Category.builder().name("mens").build());
 			Size size38 = sizeDao.save(Size.builder().title("38").build());
 			Size sizeM = sizeDao.save(Size.builder().title("M").build());
-			Category womensCategory = categoryDao.findCategoryByName("womens");
-			Category mensCategory = categoryDao.findCategoryByName("mens");
 			Subcategory dressSubcategory = subcategoryDao.save(
 					Subcategory.builder()
 							.name("dress")
-							.category(womensCategory)
 							.build()
 			);
 			Subcategory shirtSubcategory = subcategoryDao.save(
 					Subcategory.builder()
 							.name("shirt")
-							.category(womensCategory)
 							.build()
 			);
 			Subcategory jumperSubcategory = subcategoryDao.save(
 					Subcategory.builder()
 							.name("jumper")
-							.category(mensCategory)
 							.build()
 			);
 
@@ -103,6 +98,7 @@ public class ClothStoreApplication {
 						.price(new BigDecimal(1450.00))
 						.quantity(3)
 						.image(dressImageString)
+							.category(womensCategory)
 						.subcategory(dressSubcategory)
 						.size(size38)
 					.build()
@@ -114,6 +110,7 @@ public class ClothStoreApplication {
 							.price(new BigDecimal(1990.00))
 							.quantity(4)
 							.image(shirtImageString)
+							.category(womensCategory)
 							.subcategory(shirtSubcategory)
 							.size(size38)
 							.build()
@@ -125,6 +122,7 @@ public class ClothStoreApplication {
 							.price(new BigDecimal(1270.00))
 							.quantity(2)
 							.image(jumperImageString)
+							.category(mensCategory)
 							.subcategory(jumperSubcategory)
 							.size(sizeM)
 							.build()

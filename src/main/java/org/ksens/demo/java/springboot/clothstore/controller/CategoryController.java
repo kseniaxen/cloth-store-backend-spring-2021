@@ -62,9 +62,4 @@ public class CategoryController {
         return new ResponseEntity<>(responseModel, HttpStatus.OK);
     }
 
-    @GetMapping("/subcategories/category/{id}")
-    public ResponseEntity<ResponseModel> getSubcategoryByCategory(@PathVariable Long id) {
-        return new ResponseEntity<>(service.getSubcategoryByCategory(id), HttpStatus.OK);
-    }
-
 }

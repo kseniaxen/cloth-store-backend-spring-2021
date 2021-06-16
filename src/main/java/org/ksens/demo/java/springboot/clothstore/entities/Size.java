@@ -1,15 +1,15 @@
 package org.ksens.demo.java.springboot.clothstore.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Size")
 @Data
+@EqualsAndHashCode(exclude = "products")
+@ToString(exclude = "products")
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,4 +19,6 @@ public class Size{
     private Long id;
     @Column(name = "title", nullable = false, unique = true, length = 50)
     private String title;
+    @OneToMany(mappedBy="size", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private Set<Product> products;
 }

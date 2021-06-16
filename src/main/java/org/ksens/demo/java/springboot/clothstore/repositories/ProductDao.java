@@ -35,12 +35,6 @@ public interface ProductDao extends JpaRepository<Product, Long>,
             Sort sort
     );
 
-    @Query( "SELECT p FROM Product p WHERE p.subcategory.category.id IN :ids" )
-    List<Product> findByCategoryIds(
-            @Param("ids") List<Long> categoryIds,
-            Sort sort
-    );
-
     @Query( "SELECT MIN(p.price) FROM Product p" )
     BigDecimal findMinimum ();
 

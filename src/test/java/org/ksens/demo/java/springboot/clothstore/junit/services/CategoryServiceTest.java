@@ -100,16 +100,16 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void givenСategoryServiceMockWhenCallGetAllSubcategoryMethodThenReturnSuccessResponseModel () {
+    void givenSubcategoryServiceMockWhenCallGetAllMethodThenReturnSuccessResponseModel () {
         // Обучаем макет:
         // вернуть что? - результат, равный ...
         doReturn(
                 ResponseModel.builder()
                         .status(ResponseModel.SUCCESS_STATUS)
                         .data(Arrays.asList(
-                                new SubcategoryModel(1L, "sc1", 1L, new CategoryModel(1L,"c1")),
-                                new SubcategoryModel(2L, "sc1", 1L, new CategoryModel(1L,"c1")),
-                                new SubcategoryModel(3L, "sc1", 1L, new CategoryModel(1L,"c1")))
+                                new SubcategoryModel(1L, "sc1"),
+                                new SubcategoryModel(2L, "sc1"),
+                                new SubcategoryModel(3L, "sc1"))
                         ).build()
         ).when(categoryServiceMock) // откуда? - из объекта categoryServiceMock - макета службы
                 .getSubcategories(); // как результат вызова какого метода? - getAll

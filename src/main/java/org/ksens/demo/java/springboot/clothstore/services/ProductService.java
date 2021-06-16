@@ -1,10 +1,12 @@
 package org.ksens.demo.java.springboot.clothstore.services;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import org.ksens.demo.java.springboot.clothstore.entities.Category;
 import org.ksens.demo.java.springboot.clothstore.entities.Product;
 import org.ksens.demo.java.springboot.clothstore.entities.Size;
 import org.ksens.demo.java.springboot.clothstore.entities.Subcategory;
 import org.ksens.demo.java.springboot.clothstore.models.*;
+import org.ksens.demo.java.springboot.clothstore.repositories.CategoryDao;
 import org.ksens.demo.java.springboot.clothstore.repositories.ProductDao;
 import org.ksens.demo.java.springboot.clothstore.repositories.SizeDao;
 import org.ksens.demo.java.springboot.clothstore.repositories.SubcategoryDao;
@@ -28,22 +30,27 @@ public class ProductService implements IProductService {
 
     private final ProductDao productDao;
 
+    private final CategoryDao categoryDao;
+
     private final SubcategoryDao subcategoryDao;
 
     private final SizeDao sizeDao;
 
-    public ProductService(ProductDao productDao, SubcategoryDao subcategoryDao, SizeDao sizeDao) {
+    public ProductService(ProductDao productDao, CategoryDao categoryDao, SubcategoryDao subcategoryDao, SizeDao sizeDao) {
         this.productDao = productDao;
+        this.categoryDao = categoryDao;
         this.subcategoryDao = subcategoryDao;
         this.sizeDao = sizeDao;
     }
 
     public ResponseModel create(ProductModel productModel) {
+        Optional<Category> categoryOptional
+                = categoryDao.findById(productModel.getCategoryId());
         Optional<Subcategory> subcategoryOptional
                 = subcategoryDao.findById(productModel.getSubcategoryId());
         Optional<Size> sizeOptional
                 = sizeDao.findById(productModel.getSizeId());
-        if(subcategoryOptional.isPresent() && sizeOptional.isPresent()){
+        if(subcategoryOptional.isPresent() && sizeOptional.isPresent() && categoryOptional.isPresent()){
             Product product =
                     Product.builder()
                             .name(productModel.getName())
@@ -51,6 +58,7 @@ public class ProductService implements IProductService {
                             .price(productModel.getPrice())
                             .quantity(productModel.getQuantity())
                             .image(productModel.getImage())
+                            .category(categoryOptional.get())
                             .subcategory(subcategoryOptional.get())
                             .size(sizeOptional.get())
                             .build();
@@ -59,25 +67,32 @@ public class ProductService implements IProductService {
                     .status(ResponseModel.SUCCESS_STATUS)
                     .message(String.format("Product %s Created", product.getName()))
                     .build();
-        } else if(subcategoryOptional.isEmpty()){
+        }else if(subcategoryOptional.isEmpty()){
             return ResponseModel.builder()
                     .status(ResponseModel.FAIL_STATUS)
                     .message(String.format("Subcategory #%d Not Found", productModel.getSubcategoryId()))
                     .build();
-        }else{
+        }else if(sizeOptional.isEmpty()){
             return ResponseModel.builder()
                     .status(ResponseModel.FAIL_STATUS)
                     .message(String.format("Size #%d Not Found", productModel.getSizeId()))
+                    .build();
+        }else{
+            return ResponseModel.builder()
+                    .status(ResponseModel.FAIL_STATUS)
+                    .message(String.format("Category #%d Not Found", productModel.getCategoryId()))
                     .build();
         }
     }
 
     public ResponseModel update(ProductModel productModel) {
+        Optional<Category> categoryOptional
+                = categoryDao.findById(productModel.getCategoryId());
         Optional<Subcategory> subcategoryOptional
                 = subcategoryDao.findById(productModel.getSubcategoryId());
         Optional<Size> sizeOptional
                 = sizeDao.findById(productModel.getSizeId());
-        if(subcategoryOptional.isPresent() && sizeOptional.isPresent()){
+        if(subcategoryOptional.isPresent() && sizeOptional.isPresent() && categoryOptional.isPresent()){
             Product product =
                     Product.builder()
                             .id(productModel.getId())
@@ -85,6 +100,7 @@ public class ProductService implements IProductService {
                             .description(productModel.getDescription())
                             .price(productModel.getPrice())
                             .quantity(productModel.getQuantity())
+                            .category(categoryOptional.get())
                             .subcategory(subcategoryOptional.get())
                             .size(sizeOptional.get())
                             .image(productModel.getImage())
@@ -100,10 +116,15 @@ public class ProductService implements IProductService {
                     .status(ResponseModel.FAIL_STATUS)
                     .message(String.format("Subcategory #%d Not Found", productModel.getSubcategoryId()))
                     .build();
-        }else{
+        }else if(sizeOptional.isEmpty()){
             return ResponseModel.builder()
                     .status(ResponseModel.FAIL_STATUS)
                     .message(String.format("Size #%d Not Found", productModel.getSizeId()))
+                    .build();
+        }else{
+            return ResponseModel.builder()
+                    .status(ResponseModel.FAIL_STATUS)
+                    .message(String.format("Category #%d Not Found", productModel.getCategoryId()))
                     .build();
         }
     }
@@ -120,15 +141,16 @@ public class ProductService implements IProductService {
                                         .price(p.getPrice())
                                         .quantity(p.getQuantity())
                                         .image(p.getImage())
+                                        .category(
+                                                CategoryModel.builder()
+                                                        .id(p.getCategory().getId())
+                                                        .name(p.getCategory().getName())
+                                                        .build()
+                                        )
                                         .subcategory(
                                                 SubcategoryModel.builder()
                                                         .id(p.getSubcategory().getId())
                                                         .name(p.getSubcategory().getName())
-                                                        .category(
-                                                                CategoryModel.builder()
-                                                                    .id(p.getSubcategory().getCategory().getId())
-                                                                    .name(p.getSubcategory().getCategory().getName())
-                                                                        .build())
                                                         .build()
                                         )
                                         .size(
@@ -242,15 +264,16 @@ public class ProductService implements IProductService {
                                         .price(p.getPrice())
                                         .quantity(p.getQuantity())
                                         .image(p.getImage())
+                                        .category(
+                                                CategoryModel.builder()
+                                                        .id(p.getCategory().getId())
+                                                        .name(p.getCategory().getName())
+                                                        .build()
+                                        )
                                         .subcategory(
                                                 SubcategoryModel.builder()
                                                         .id(p.getSubcategory().getId())
                                                         .name(p.getSubcategory().getName())
-                                                        .category(
-                                                                CategoryModel.builder()
-                                                                        .id(p.getSubcategory().getCategory().getId())
-                                                                        .name(p.getSubcategory().getCategory().getName())
-                                                                        .build())
                                                         .build()
                                         )
                                         .size(

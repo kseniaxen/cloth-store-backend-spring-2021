@@ -131,4 +131,34 @@ public class ProductControllerRequestsTest {
         });
     }
 
+    @Test
+    @Order(3)
+    public void givenCategoryIdThanWhenRequestsListOfProductsThenCorrect () throws Exception {
+        // получение от REST API списка товаров, у которых id подкатегории равен 1,2
+        // и размер 1
+        ResponseEntity<ResponseModel> response =
+                testRestTemplate.getForEntity(
+                        baseUrl + "/products/filtered::orderBy:id::sortingDirection:DESC/?search=category:[1]",
+                        ResponseModel.class
+                );
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        ArrayList products =
+                (ArrayList) response.getBody().getData();
+        assertNotNull(products);
+        assertEquals(2, products.size());
+        // сложный тестовый веб-клиент testRestTemplate десериализует множество данных моделей
+        // как список словарей, поэтому нужно явное преоразование в список моделей ProductModel
+        List<ProductModel> productModels =
+                (new ObjectMapper())
+                        .convertValue(products, new TypeReference<>() { });
+        // у каждого найденного товара должны быть значения полей,
+        // соотетствующие параметрам поискового запроса
+        productModels.forEach(product -> {
+            List<Long> categoryIds = Lists.newArrayList(1L);
+            Matcher<Iterable<? super Long>> matcherSub = hasItem(product.getCategory().getId());
+            assertThat(categoryIds, matcherSub);
+            System.out.println(product);
+        });
+    }
+
 }
