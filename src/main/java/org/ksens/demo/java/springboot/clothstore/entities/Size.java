@@ -19,6 +19,6 @@ public class Size{
     private Long id;
     @Column(name = "title", nullable = false, unique = true, length = 50)
     private String title;
-    @OneToMany(mappedBy="size", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="size", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Product> products;
 }

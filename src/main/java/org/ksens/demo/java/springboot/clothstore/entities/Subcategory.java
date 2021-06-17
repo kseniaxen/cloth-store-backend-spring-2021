@@ -19,6 +19,6 @@ public class Subcategory {
     private Long id;
     @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
-    @OneToMany(mappedBy="subcategory", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="subcategory", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<Product> products;
 }
