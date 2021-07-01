@@ -57,7 +57,7 @@ public class CategoryService implements ICategoryService {
     }
 
     public ResponseModel getCategories() {
-        List<Category> categories = categoryDao.findAll(Sort.by("id").descending());
+        List<Category> categories = categoryDao.findAll(Sort.by("id"));
         List<CategoryModel> categoryModels =
                 categories.stream()
                         .map(c ->
@@ -117,7 +117,7 @@ public class CategoryService implements ICategoryService {
     }
 
     public ResponseModel getSubcategories() {
-        List<Subcategory> subcategories = subcategoryDao.findAll(Sort.by("id").descending());
+        List<Subcategory> subcategories = subcategoryDao.findAll(Sort.by("id"));
         List<SubcategoryModel> subcategoryModels =
                 subcategories.stream()
                         .map(c ->
