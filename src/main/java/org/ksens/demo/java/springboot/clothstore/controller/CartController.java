@@ -1,6 +1,7 @@
 package org.ksens.demo.java.springboot.clothstore.controller;
 
 import org.ksens.demo.java.springboot.clothstore.models.CartItem;
+import org.ksens.demo.java.springboot.clothstore.models.CategoryModel;
 import org.ksens.demo.java.springboot.clothstore.models.ResponseModel;
 import org.ksens.demo.java.springboot.clothstore.services.CartService;
 import org.springframework.http.HttpStatus;
@@ -73,5 +74,23 @@ public class CartController {
                         , CartItem.Action.REM
                 );
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{status}")
+    @ResponseBody
+    public ResponseEntity<ResponseModel> getAllByStatus(@PathVariable("status") String status) {
+        return new ResponseEntity<>(
+                cartService.getAllByStatus(status),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/{id}/{status}")
+    @ResponseBody
+    public ResponseEntity<ResponseModel> updateStatus(@PathVariable("id") String id, @PathVariable("status") String status ) {
+        return new ResponseEntity<>(
+                cartService.updateStatus(id, status),
+                HttpStatus.OK
+        );
     }
 }

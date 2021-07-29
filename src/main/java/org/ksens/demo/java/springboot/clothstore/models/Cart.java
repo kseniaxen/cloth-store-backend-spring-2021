@@ -20,6 +20,7 @@ public class Cart {
     @Id
     private String id;
     private Long userId;
+    private String status;
     private List<CartItem> cartItems;
     public Cart() {
         cartItems = new ArrayList<>();

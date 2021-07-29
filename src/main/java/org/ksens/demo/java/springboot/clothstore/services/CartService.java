@@ -16,7 +16,6 @@ import java.util.Optional;
 /**
  * Служба для добавления, удаления и изменения количества
  * товаров в корзине покупателя
- * @author yurii
  * */
 @Service
 public class CartService {
@@ -51,9 +50,10 @@ public class CartService {
                     userDao.findUserByName(authentication.getName()).getId();
             // из mongo db по идентификатору - объект корзины пользователя
             Cart cart = cartMongoDao.findCartByUserId(userId);
-            if (cart == null) {
+            if (cart == null || cart.getStatus().equals("pay")) {
                 cart = new Cart();
                 cart.setUserId(userId);
+                cart.setStatus("not_pay");
             }
             return cart;
         } else {
@@ -142,6 +142,30 @@ public class CartService {
         if (cart != null) {
             cart.getCartItems().clear();
             cartMongoDao.save(cart);
+        }
+    }
+
+    public ResponseModel getAllByStatus (String status){
+        return ResponseModel.builder()
+                .status(ResponseModel.SUCCESS_STATUS)
+                .message("Get all card by status")
+                .data(cartMongoDao.findAllByStatus(status))
+                .build();
+    }
+
+    public ResponseModel updateStatus (String mongoId, String status){
+        Optional<Cart> cartOptional = cartMongoDao.findById(mongoId);
+        if(cartOptional.isPresent()){
+            cartOptional.get().setStatus(status);
+            return ResponseModel.builder()
+                    .status(ResponseModel.SUCCESS_STATUS)
+                    .message("Update status on card")
+                    .build();
+        }else{
+            return ResponseModel.builder()
+                    .status(ResponseModel.FAIL_STATUS)
+                    .message("No cart")
+                    .build();
         }
     }
 }
