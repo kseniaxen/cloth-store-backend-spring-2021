@@ -27,6 +27,15 @@ public class ClothStoreApplication {
 	@Value("${tests.unit.strings.image-base64-jumper}")
 	private String jumperImageString;
 
+	@Value("${tests.unit.strings.image-base64-adidas}")
+	private String adidasImageString;
+
+	@Value("${tests.unit.strings.image-base64-dress2}")
+	private String dress2ImageString;
+
+	@Value("${tests.unit.strings.image-base64-tshirt2}")
+	private String tshirt2ImageString;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ClothStoreApplication.class, args);
 	}
@@ -78,6 +87,7 @@ public class ClothStoreApplication {
 			Category mensCategory = categoryDao.save(Category.builder().name("mens").build());
 			Size size38 = sizeDao.save(Size.builder().title("38").build());
 			Size sizeM = sizeDao.save(Size.builder().title("M").build());
+			Size sizeL = sizeDao.save(Size.builder().title("L").build());
 			Subcategory dressSubcategory = subcategoryDao.save(
 					Subcategory.builder()
 							.name("dress")
@@ -91,6 +101,11 @@ public class ClothStoreApplication {
 			Subcategory jumperSubcategory = subcategoryDao.save(
 					Subcategory.builder()
 							.name("jumper")
+							.build()
+			);
+			Subcategory tshirtSubcategory = subcategoryDao.save(
+					Subcategory.builder()
+							.name("T-shirt")
 							.build()
 			);
 
@@ -130,6 +145,46 @@ public class ClothStoreApplication {
 							.size(sizeM)
 							.build()
 			);
+
+			productDao.save(
+					Product.builder()
+							.name("Magnet")
+							.description("Composition: Cotton - 100%")
+							.price(new BigDecimal(1032.00))
+							.quantity(3)
+							.image(dress2ImageString)
+							.category(womensCategory)
+							.subcategory(dressSubcategory)
+							.size(sizeM)
+							.build()
+			);
+			/*
+			productDao.save(
+					Product.builder()
+							.name("adidas")
+							.description("Composition: Cotton - 100%")
+							.price(new BigDecimal(1140.00))
+							.quantity(5)
+							.image(adidasImageString)
+							.category(womensCategory)
+							.subcategory(tshirtSubcategory)
+							.size(sizeM)
+							.build()
+			);
+
+			productDao.save(
+					Product.builder()
+							.name("O'stin")
+							.description("Composition: Cotton - 100%")
+							.price(new BigDecimal(399.00))
+							.quantity(5)
+							.image(tshirt2ImageString)
+							.category(mensCategory)
+							.subcategory(tshirtSubcategory)
+							.size(sizeL)
+							.build()
+			);
+			 */
 		};
 
 	}
